@@ -89,7 +89,7 @@ export default function Home() {
         </h1>
 
         {games.length === 0 ? (
-          <p>No games available.</p>
+          <p>Loading OR No games available.</p>
         ) : (
           <div className="grid gap-6">
             {games.map((game) => {
@@ -99,6 +99,11 @@ export default function Home() {
                 game.teams_normalized?.find((t) => t.is_away)?.name || "Away";
               const home =
                 game.teams_normalized?.find((t) => t.is_home)?.name || "Home";
+
+              const awayMascot =
+                game.teams_normalized?.find((t) => t.is_away)?.mascot || "Away";
+              const homeMascot =
+                game.teams_normalized?.find((t) => t.is_home)?.mascot || "Home";
 
               const date = new Date(game.event_date).toLocaleString();
 
@@ -199,7 +204,8 @@ export default function Home() {
                   {/* MIDDLE COLUMN — MAIN GAME CARD */}
                   <div className="border rounded-md p-4 shadow-sm bg-white max-w-[1200px] w-full mx-auto">
                     <h2 className="text-xl font-semibold mb-1">
-                      {away} ({awayRecord}) @ {home} ({homeRecord})
+                      {away} {awayMascot} ({awayRecord}) @ {home} {homeMascot} (
+                      {homeRecord})
                     </h2>
 
                     <p>
