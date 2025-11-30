@@ -29,4 +29,5 @@ export const stadiumCoords = {
   "Bank of America Stadium": { lat: 35.2251, lon: -80.8528 },
   "M&T Bank Stadium": { lat: 39.278, lon: -76.6227 },
   "Accresure Stadium": { lat: 40.4468, lon: -80.0158 },
+  "Northwest Stadium": { lat: 38.907778, lon: -76.864444 },
 };

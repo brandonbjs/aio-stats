@@ -57,11 +57,27 @@ export async function GET() {
         return { ...game, weather_api: null };
       }
 
-      const closest = findClosestHour(weatherData.hourly, game.event_date);
+      const hourly = weatherData.hourly || [];
+      const kickoff = new Date(game.event_date).getTime();
+
+      // find index of hour closest to kickoff
+      let closestIndex = 0;
+      let smallestDiff = Infinity;
+
+      hourly.forEach((h, i) => {
+        const diff = Math.abs(kickoff - h.dt * 1000);
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
+          closestIndex = i;
+        }
+      });
+
+      // get 4-hour block
+      const windowHours = hourly.slice(closestIndex, closestIndex + 4);
 
       return {
         ...game,
-        weather_api: closest,
+        weather_api: windowHours,
       };
     })
   );
