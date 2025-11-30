@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AIO Stats
 
-## Getting Started
+Welcome to my AIO Stats project! This a Next.js React web app that combines a number of APIs to provide comprehensive NFL game stats for the upcoming Sunday slate.
 
-First, run the development server:
+**PLEASE NOTE: This project is continually changing at the moment.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Developer Information:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Brandon James Shaffer | B.S. in Computer Science from Northern Arizona University
+  - Email: bjs.swe@gmail.com
+  - GitHub: https://github.com/brandonbjs
+  - LinkedIn: https://www.linkedin.com/in/brandonbjs/
+  - Portfolio Website: https://brandonjshaffer.com
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Summary of Project
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Project Idea:
 
-## Learn More
+The objective of this is to combine many useful APIs that are relevant to NFL football games and then provide all the information in one place.
 
-To learn more about Next.js, take a look at the following resources:
+### Purpose:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This app is meant to cut down the due dilligence and research time needed to make informed decisions around fantasy football and sports betting.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Planning:
 
-## Deploy on Vercel
+- **Front-End Development:** The front-end user interface is designed and created using Next.js React and styled using Tailwind CSS. I will uphold ES6 best practices to provide the user with an intuitive, responsive, and enjoyable website experience.
+- **Hosting:** GitHub Pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Functionality
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This web app will function as a large data aggregate for many useful APIs which will help the user better inform themselves on the upcoming Sunday slate of football games. This will include things like weather information, line data, opening line data, stadium information, injury updates, and more. All of this information is readily online in multiple places but not all in one place.
+
+#### React Components
+
+- TBD
+
+#### Functions Used
+
+- TBD
+
+#### Libraries Used
+
+- TBD
+
+#### FUTURE Design Ideas
+
+- TBD
