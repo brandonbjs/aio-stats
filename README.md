@@ -1,6 +1,6 @@
 # AIO Stats
 
-Welcome to my AIO Stats project! This a Next.js React web app that combines a number of APIs to provide comprehensive NFL game stats for the upcoming Sunday slate.
+Welcome to my All-In-One Sunday Stats project! This a Next.js React web app that combines a number of APIs to provide comprehensive NFL game stats for the upcoming Sunday slate.
 
 **PLEASE NOTE: This project is continually changing at the moment.**
 
