@@ -1,11 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { indoorStadiums } from "@/lib/stadiumIndoors";
 
 export default function Home() {
   const [games, setGames] = useState([]);
   const [openers, setOpeners] = useState([]);
 
+  // -------- WIND HELPERS --------
+  function getWindDirection(deg) {
+    if (deg === undefined || deg === null) return "";
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    const index = Math.round(deg / 45) % 8;
+    return directions[index];
+  }
+
+  function getWindArrow(direction) {
+    const map = {
+      N: "↑",
+      NE: "↗",
+      E: "→",
+      SE: "↘",
+      S: "↓",
+      SW: "↙",
+      W: "←",
+      NW: "↖",
+    };
+    return map[direction] || "";
+  }
+
+  // -------- FETCH DATA --------
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,7 +45,6 @@ export default function Home() {
         const nightOpenerRes = await fetch("/api/nightOpener");
         const nightOpenerData = await nightOpenerRes.json();
 
-        // Merge & sort games by kickoff time
         const allGames = [
           ...(Array.isArray(gamesData) ? gamesData : []),
           ...(Array.isArray(nightGamesData) ? nightGamesData : []),
@@ -29,7 +52,6 @@ export default function Home() {
 
         setGames(allGames);
 
-        // Merge corresponding opener data
         const allOpeners = [
           ...(Array.isArray(openersData) ? openersData : []),
           ...(Array.isArray(nightOpenerData) ? nightOpenerData : []),
@@ -66,17 +88,29 @@ export default function Home() {
               const date = new Date(game.event_date).toLocaleString();
 
               const stadium = game.score?.venue_name || "Unknown Stadium";
+              const isIndoor = indoorStadiums[stadium] === true;
               const city = game.score?.venue_location || "Unknown City";
+
               const awayRecord = game.teams_normalized?.[0]?.record;
               const homeRecord = game.teams_normalized?.[1]?.record;
               const awayDivision = game.teams_normalized?.[0]?.division_id;
               const homeDivision = game.teams_normalized?.[1]?.division_id;
               const isDivisionGame = awayDivision === homeDivision;
 
-              const weather = game.weather
-                ? `${game.weather.condition}, ${game.weather.temperature}°F, Wind ${game.weather.wind_mph} mph`
-                : "N/A";
+              // -------- WEATHER (One Call Hourly) --------
+              const wx = game.weather_api; // already matched to kickoff hour
 
+              const temp = wx ? Math.round(wx.temp) : null;
+              const feels = wx ? Math.round(wx.feels_like) : null;
+              const wind = wx ? Math.round(wx.wind_speed) : null;
+              const gust = wx ? Math.round(wx.wind_gust) : null;
+              const deg = wx?.wind_deg;
+              const direction = wx ? getWindDirection(deg) : "";
+              const arrow = wx ? getWindArrow(direction) : "";
+              const icon = wx?.weather?.[0]?.icon;
+              const desc = wx?.weather?.[0]?.description;
+
+              // -------- LINE DATA --------
               const dk = game.lines?.["19"];
               const fd = game.lines?.["23"];
 
@@ -116,6 +150,7 @@ export default function Home() {
                   <h2 className="text-xl font-semibold mb-1">
                     {away} ({awayRecord}) @ {home} ({homeRecord})
                   </h2>
+
                   <p>
                     {isDivisionGame ? "🏆 Division Game" : "Non-Division Game"}
                   </p>
@@ -123,11 +158,64 @@ export default function Home() {
                     📍 {stadium} — {city}
                   </p>
                   <p>🕒 {date}</p>
-                  <p>🌤 Weather: {weather}</p>
 
+                  {/* -------- WEATHER CARD -------- */}
+                  {isIndoor ? (
+                    <div className="mt-2 p-3 bg-gray-800/30 rounded-md text-gray-100 inline-block">
+                      <div className="flex items-center gap-2 text-lg font-semibold">
+                        🏟️ Indoor Stadium
+                      </div>
+                      <p className="text-sm text-black mt-1">
+                        Weather conditions do not affect gameplay.
+                      </p>
+                    </div>
+                  ) : wx ? (
+                    <div className="mt-2 p-3 bg-gray-800/30 rounded-md text-gray-100 inline-block">
+                      {/* Top Row: Icon + Temp */}
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
+                          alt={desc}
+                          className="w-10 h-10"
+                        />
+                        <div className="text-lg font-semibold">
+                          {temp}°F — {desc}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 mt-2 text-sm">
+                        <span className="px-2 py-1 bg-gray-700 rounded-md">
+                          💨 {wind} mph
+                        </span>
+
+                        <span className="px-2 py-1 bg-gray-700 rounded-md">
+                          {arrow} {direction}
+                        </span>
+
+                        {gust != null && (
+                          <span className="px-2 py-1 bg-gray-700 rounded-md">
+                            🌬️ Gusts {gust} mph
+                          </span>
+                        )}
+
+                        <span className="px-2 py-1 bg-gray-700 rounded-md">
+                          Feels {feels}°F
+                        </span>
+                      </div>
+
+                      <div className="mt-1 text-xs text-black">
+                        Forecast for {new Date(wx.dt * 1000).toLocaleString()}
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-gray-300">Weather: N/A</p>
+                  )}
+
+                  {/* -------- LINES -------- */}
                   <div className="bg-[#8a828293] p-3 rounded-md mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div>
                       <h3 className="font-bold mb-1">📈 Opening Lines</h3>
+
                       <div className="bg-[#5cb85c] text-white inline-block p-1 rounded-md">
                         <p>
                           DK Spread ({home}): {openerDKspread}
@@ -138,6 +226,7 @@ export default function Home() {
                           {openerDKMLAway}
                         </p>
                       </div>
+
                       <div className="bg-[#0b6fff] text-white inline-block p-1 rounded-md">
                         <p>
                           FD Spread ({home}): {openerFDspread}
@@ -152,6 +241,7 @@ export default function Home() {
 
                     <div>
                       <h3 className="font-bold mb-1">📈 Current Lines</h3>
+
                       <div className="bg-[#5cb85c] text-white inline-block p-1 rounded-md">
                         <p>
                           DK Spread ({home}): {dkSpread}
@@ -162,6 +252,7 @@ export default function Home() {
                           {dkMoneylineAway}
                         </p>
                       </div>
+
                       <div className="bg-[#0b6fff] text-white inline-block p-1 rounded-md">
                         <p>
                           FD Spread ({home}): {fdSpread}
