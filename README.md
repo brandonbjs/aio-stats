@@ -27,7 +27,7 @@ This app is meant to cut down the due dilligence and research time needed to mak
 ### Planning:
 
 - **Front-End Development:** The front-end user interface is designed and created using Next.js React and styled using Tailwind CSS. I will uphold ES6 best practices to provide the user with an intuitive, responsive, and enjoyable website experience.
-- **Hosting:** GitHub Pages
+- **Hosting:** Vercel
 
 ### Functionality
 
