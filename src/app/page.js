@@ -48,10 +48,20 @@ export default function Home() {
         const injuryRes = await fetch("/api/injuries");
         const injuryData = await injuryRes.json();
 
-        const allGames = [
+        let allGames = [
           ...(Array.isArray(gamesData) ? gamesData : []),
           ...(Array.isArray(nightGamesData) ? nightGamesData : []),
-        ].sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
+        ];
+
+        // REMOVE DUPLICATES by event_id
+        allGames = Array.from(
+          new Map(allGames.map((g) => [g.event_id, g])).values()
+        );
+
+        // SORT after deduping
+        allGames.sort(
+          (a, b) => new Date(a.event_date) - new Date(b.event_date)
+        );
 
         allGames.forEach((game) => {
           const awayAbbr = game.teams_normalized.find(
@@ -155,7 +165,7 @@ export default function Home() {
               return (
                 <div
                   key={game.event_id}
-                  className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-[0.15fr_7fr_0.15fr] gap-1 items-start justify-items-center"
+                  className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-[0.20fr_6fr_0.20fr] gap-1 items-start justify-items-center"
                 >
                   {/* LEFT COLUMN — AWAY INJURIES */}
                   <div className="hidden sm:block p-3 rounded-md h-full">
@@ -203,7 +213,7 @@ export default function Home() {
 
                   {/* MIDDLE COLUMN — MAIN GAME CARD */}
                   <div className="border rounded-md p-4 shadow-sm bg-white max-w-[1200px] w-full mx-auto">
-                    <h2 className="text-xl font-semibold mb-1">
+                    <h2 className="text-xl font-semibold mb-1 text-black">
                       {away} {awayMascot} ({awayRecord}) @ {home} {homeMascot} (
                       {homeRecord})
                     </h2>

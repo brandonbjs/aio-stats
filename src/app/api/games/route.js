@@ -25,7 +25,7 @@ export async function GET() {
   });
 
   const sundayUrl =
-    "https://therundown-therundown-v1.p.rapidapi.com/sports/2/events/2025-11-30?" +
+    "https://therundown-therundown-v1.p.rapidapi.com/sports/2/events/2025-12-7?" +
     params.toString();
 
   const sundayRes = await fetch(sundayUrl, {

@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const options = {
       method: "GET",
-      url: "https://therundown-therundown-v1.p.rapidapi.com/sports/2/openers/2025-11-30",
+      url: "https://therundown-therundown-v1.p.rapidapi.com/sports/2/openers/2025-12-7",
       params: {
         include: "scores, lines",
         affiliate_ids: "19, 23",
